@@ -1,0 +1,20 @@
+idf_component_register(
+    SRCS
+        "main.c"
+        "tasks/display_task.c"
+        "tasks/clock_task.c"
+        "tasks/network_task.c"
+        "tasks/power_task.c"
+        "tasks/watchdog_task.c"
+        "drivers/oled_ssd1306.c"
+        "network/wifi.c"
+        "network/http_client.c"
+        "fonts/font_8x16.c"
+    INCLUDE_DIRS
+        "."
+        "shared"
+        "drivers"
+        "network"
+        "fonts"
+        "tasks"
+)
