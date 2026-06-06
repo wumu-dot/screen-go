@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dist_electron/
+*.lnk
+*.bat
+*.jpg
+*.png
+desktop.ini
+~$*.docx
+~$*.tmp
+*.ps1
