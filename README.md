@@ -2,6 +2,8 @@
 
 基于 [iLx11/screen-go](https://github.com/iLx11/screen-go)（MIT 协议）修复和增强。
 
+![软件界面](docs/screenshot.png)
+
 ## 功能
 
 - 导入任意图片（PNG / JPG / BMP 等），一键生成 C 语言像素数组
