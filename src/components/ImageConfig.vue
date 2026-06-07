@@ -84,7 +84,7 @@ watch(() => screenStore.configArray[4], () => {
 watch(picSizeData, () => {
   screenStore.resizeWidth = parseInt(picSizeData.width) || 0
   screenStore.resizeHeight = parseInt(picSizeData.height) || 0
-}, { deep: true })
+}, { deep: true, immediate: true })
 
 // --- 取模设置 ---
 const setLatticeFormat = (k: number) => { curLattice.value = k; screenStore.setConfigArray(0, k) }
