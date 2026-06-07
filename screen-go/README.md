@@ -1,130 +1,136 @@
-# SCREEN-GO
+# Screen-GO 图片取模工具
 
-此项目基于大佬 [yhf](https://github.com/yhf98 ) 的项目思路所开发，并遵循 MIT 开源协议
+基于 [iLx11/screen-go](https://github.com/iLx11/screen-go)（MIT 协议）修复和增强。
 
- 此项目为图片取模软件
+## 功能
 
-🍚 可以直接模拟对硬件屏幕的布局和显示进行编辑和调整
+- 导入任意图片（PNG / JPG / BMP 等），一键生成 C 语言像素数组
+- 支持**单色取模**和**彩色 RGB565 取模**
+- 内置图片编辑器：添加文字、图形、滤镜
+- 常用 TFT 屏幕尺寸预设，也可手动输入自定义分辨率
+- 可配置取模参数：点阵格式、扫描方式、扫描方向、输出进制
 
- 🍫  可以导入任何类型的图片
+## 快速开始
 
-🍜 编辑文字与图形
+### 环境要求
 
-🥘 添加与调整不同滤镜
+- [Node.js](https://nodejs.org/) >= 18
+- [pnpm](https://pnpm.io/) >= 8
 
-🥠 任意缩放与裁剪图片
+### 安装依赖
 
-🍵 支持单色和彩色图片取模，并直接生成可修改可一键复制的图片取模数组（支持正则替换修改）。
-
- 之后应该会不断优化此软件或开发更多有意思的软件，感谢您的支持！！！
-
-
-
-### 安装项目所需包文件
-
-需要安装 node ，可以访问 nodejs 官网安装；还需安装 pnpm，也可以不安装，直接把 pnpm 替换为 npm run 即可
-
-```sh
+```bash
 pnpm install
 ```
 
-### 项目开发
+### 开发模式运行
 
-```sh
+```bash
 pnpm start
 ```
 
-### 项目打包
+### 打包为 Windows 安装包
 
-```sh
-pnpm electron:build
+```bash
+pnpm electron:build:win
 ```
 
+打包后文件在 `dist_electron/` 目录。
 
+## 使用指南
+
+### 基本流程
+
+1. 点击 **导入图片** 选择一张图片
+2. 点击常用尺寸预设或手动输入宽高（如 128×160）
+3. 选择取模方式（彩色选"逐行式"）
+4. 点击 **提交生成**
+5. 右侧出现 C 数组，点击即可复制
+
+### 编辑图片
+
+点击 **编辑文字** 打开编辑器，可以：
+
+- 添加文字（底部 T 图标）
+- 绘制图形（矩形、圆形、三角形等）
+- 应用滤镜（灰度、模糊、锐化、反色等）
+- 裁剪、旋转
+
+### 取模参数说明
+
+| 参数 | 选项 | 说明 |
+|------|------|------|
+| 点阵格式 | 阳码 / 阴码 | 阳码：有像素为1；阴码：有像素为0 |
+| 取模方式 | 逐行式 / 逐列式 / 列行式 / 行列式 | 像素扫描顺序；彩色仅支持逐行式 |
+| 取模走向 | 顺向 / 逆向 | 顺向：从左到右；逆向：从右到左 |
+| 输出进制 | 十六进制 / 十进制 | 推荐十六进制（0x00 格式） |
+
+### 单色取模
+
+- 支持阈值调整：灰度值大于阈值为白，小于阈值为黑
+- 默认阈值 120，范围 0~255
+
+### 彩色取模
+
+- 输出 RGB565 格式（2 字节/像素）
+- 仅支持逐行式扫描
+
+## 输出格式示例
+
+### 单色
+```c
+unsigned char bmp[256] = {
+  0x00, 0x7E, 0x42, 0x42, ...
+};
+```
+
+### 彩色 (RGB565)
+```c
+unsigned char bmp[512] = {
+  0xF8, 0x00, 0x07, 0xE0, ...
+};
+```
+
+## 常用屏幕预设
+
+| 尺寸 | 分辨率 |
+|------|--------|
+| 0.96" | 128 × 64 |
+| 1.3" | 240 × 240 |
+| 1.44" | 128 × 128 |
+| 1.8" | 128 × 160 |
+| 2.0" | 240 × 320 |
+| 2.4" | 240 × 320 |
+| 2.8" | 240 × 320 |
 
 ## 项目结构
 
-```bash
-│  .gitignore
-│  2_0_0icon.psd // 2.0.0 版本的图标 PS 文件
-│  env.d.ts
-│  icon.psd
-│  index.html
-│  package.json
-│  pnpm-lock.yaml
-│  README.md // 介绍文件
-│  tsconfig.app.json
-│  tsconfig.json
-│  tsconfig.node.json
-│  tui-image-editor.css // 修改的 tui-image-editor 组件的样式，导入包后替换即可
-│  vite.config.ts
-│  
-├─electron // 主进程
-│  ├─controller	// 主进程逻辑的执行层
-│  │      checkPackage.js // 包检查脚本
-│  │      ImageToHexArray.js // 图片信息转取模数组的执行脚本
-│  │      picDataEditor.js // 图片编辑与裁剪的执行脚本
-│  │      windowControl.js // 窗口事件的执行
-│  │      
-│  └─main
-│          main.js // 主进程入口文件
-│          preload.js // 预加载文件，渲染进程与主进程在此文件中交互
-│          
-├─public
-│  │  favicon.ico
-│  │  icon.ico // 软件图标文件，可以进行替换
-│  │  
-│  └─img // 黑白色的画布基础图片
-│          black.png
-│          blank.png
-│  
-└─src // 渲染进程
-    │  App.vue
-    │  main.ts
-    │  
-    ├─assets
-    │  ├─font
-    │  │      ceyy.ttf
-    │  │      
-    │  └─img
-    │          black.png
-    │          blank.png
-    │    
-    ├─components // 所有没有通过路由显示的组件
-    │      CommitBox.vue
-    │      CropConfig.vue
-    │      FuncBox.vue
-    │      HeadMessage.vue
-    │      ImageConfig.vue
-    │      ImageEditor.vue
-    │      PopBox.vue
-    │      ResultData.vue
-    │      ResultDataConfig.vue
-    │      ThresholdConfig.vue
-    │      WindowTools.vue
-    │      
-    ├─router
-    │      index.ts
-    │      
-    ├─stores // pinia stores （没有进一步解耦，所有的都写在一起了）
-    │      counter.ts
-    │      store.ts
-    │  
-    ├─styles // 默认与基础样式
-    │      index.scss
-    │      reset.scss
-    │      variable.scss
-    │  
-    ├─utils // 渲染进程所使用的工具函数，操作图片的函数适用于渲染层使用 Node 包，但是不推荐
-    │      ImageToHexArray.ts
-    │      imgTools.ts
-    │      storage.ts
-    │      theme.ts
-    │      
-    └─window
-            HomePage.vue
+```
+screen-go/
+├── src/              # Vue 前端源码
+│   ├── components/   # Vue 组件
+│   ├── stores/       # Pinia 状态管理
+│   └── window/       # 页面组件
+├── electron/         # Electron 主进程
+│   ├── main/         # 主进程入口
+│   └── controller/   # 主进程逻辑
+├── appDir/           # 编译后的 Electron 代码
+├── dist/             # 编译后的前端代码
+└── dist_electron/    # Electron 打包输出
 ```
 
+## 修复记录
 
+详见 [CHANGELOG.md](./CHANGELOG.md)
 
- 
+基于原项目修复了以下问题：
+1. 提交生成卡死
+2. 导入图片数据格式错误
+3. 编辑器图片数据无法传回主窗口
+4. 取模参数读取错误的 Store
+5. 选项点击无视觉反馈
+6. 提交生成缺少错误处理
+
+## 开源协议
+
+MIT License — 基于 [iLx11/screen-go](https://github.com/iLx11/screen-go)

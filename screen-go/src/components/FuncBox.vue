@@ -11,6 +11,12 @@ const configStore = useConfigStore()
 const screenStore = useScreenStore()
 const modeStyle = ref<boolean>(true)
 
+const hasImage = () => {
+  return configStore.screenData.baseData
+    || getItem('screenDataBase64')
+    || screenStore.editorPicData
+}
+
 // 单色取模
 const monochromeMode = () => {
   modeStyle.value = true
@@ -29,7 +35,7 @@ const thresholdShow = () => {
     XBox.popMes('彩色取模不支持调整阈值！')
     return
   }
-  if(screenStore.editorPicData == '') {
+  if(!hasImage()) {
     XBox.popMes('请先编辑一张图片')
     return 
   }
@@ -38,7 +44,7 @@ const thresholdShow = () => {
 
 // 图片裁剪
 const cropShow = () => {
-  if(configStore.screenData.baseData == '') {
+  if(!hasImage()) {
     XBox.popMes('请先编辑一张图片')
     return 
   }

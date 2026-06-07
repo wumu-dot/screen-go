@@ -3,7 +3,6 @@ import WindowTitle from '../components/tools/WindowTitle.vue'
 import { onMounted, nextTick, ref, watch, onBeforeUnmount } from 'vue'
 import ImageEditor from '../components/ImageEditor.vue'
 import ImageConfig from '../components/ImageConfig.vue'
-import VideoConfig from '../components/VideoConfig.vue'
 import ResultDataConfig from '../components/ResultDataConfig.vue'
 import CommitBox from '../components/CommitBox.vue'
 import ResultData from '../components/ResultData.vue'
@@ -209,11 +208,6 @@ watch(
   }
 )
 
-const configShow = ref<boolean>(false)
-const setConfigShow = state => {
-  configShow.value = state
-  screenStore.curMode = state
-}
 </script>
 
 <template>
@@ -237,7 +231,6 @@ const setConfigShow = state => {
       <div
         id="screen-box"
         @click="openScreenPage"
-        v-if="!configShow"
       >
         <div>
           <img
@@ -251,21 +244,8 @@ const setConfigShow = state => {
       <div id="result-data-box">
         <ResultData />
       </div>
-      <div
-        id="config-tool-box"
-        v-if="!configShow"
-      >
+      <div id="config-tool-box">
         <ImageConfig />
-      </div>
-      <div
-        id="video-config-box"
-        v-if="configShow"
-      >
-        <VideoConfig />
-      </div>
-      <div id="func-switch">
-        <div @click="setConfigShow(false)">图片取模</div>
-        <div @click="setConfigShow(true)">视频取模</div>
       </div>
       <div id="commit-box">
         <CommitBox />
